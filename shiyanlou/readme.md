@@ -1,10 +1,19 @@
 # 爬取github仓库的提交、分支、版本
 
+## 相关技术
+
+- python与mysql
+- scrapy
+
 ## 准备
 
 ### 环境
 
-`pycharm`
+- Python3.6
+- scrapy1.5
+- mysql5.6
+- sqlalchemy
+- mysqlclient
 
 ### mysql配置：编码、新建数据库
 
