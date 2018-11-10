@@ -10,5 +10,7 @@ Some python Spiders. Update In One Week.
    1. [猫眼](Base/Maoyan.md)
 4. Ajax
    1. [toutiao](Ajax/toutiao.py)
-   2. [某人要的](Ajax/huaban.py)，图片下载器需要完善
+   2. 某人要的，(windows, python3.6)
+      1. [scrapy版](Ajax\huaban\main.py)，图片下载器需要完善
+      2. [requests版](Ajax/huaban.py)，图片追踪难弄。
 

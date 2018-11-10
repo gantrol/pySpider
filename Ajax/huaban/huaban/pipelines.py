@@ -22,20 +22,22 @@ class ImagePipeline(ImagesPipeline):
         # 循环每一张图片地址下载，若传过来的不是集合则无需循环直接yield
             # meta里面的数据是从spider获取，然后通过meta传递给下面方法：file_path
         # print(item['image'])
-        if not os.path.exists(item.get('title')):
-            os.mkdir(item.get('title'))
+        path = '.images/beauty/'
+        if not os.path.exists(path):
+            os.makedirs(path)
         try:
             image_url = item.get('image')
             response = requests.get(image_url)
             if response.status_code == 200:
-                file_path = '.images/beauty/{0}/{1}.{2}'.format(item.get('title'), md5(response.content).hexdigest(), 'jpg')
+                file_path = path + '{0}.{1}'.format(item.get('title') + md5(response.content).hexdigest(), 'jpg')
                 if not os.path.exists(file_path):
                     with open(file_path, 'wb') as f:
                         f.write(response.content)
+                    print('Downloaded image path is %s' % file_path)
                 else:
                     print('Already Downloaded', file_path)
         except requests.ConnectionError:
-            print('Failed to Save Image')
+            print('Failed to Save Image，item %s' % item)
 
 
 
