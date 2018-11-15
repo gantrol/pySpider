@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+__author__ = 'oliver'
+
 from scrapy.cmdline import execute
-import sys
+
 import os
+import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-execute(['scrapy', 'crawl', 'shiyanlou-github'])
 
-# execute(['scrapy', 'crawl', 'follow'])
+execute(["scrapy", "crawl", "jobbole"])

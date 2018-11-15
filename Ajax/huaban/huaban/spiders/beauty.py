@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 class BeautySpider(scrapy.Spider):
     name = 'beauty'
     params = {
-        'max': 2108834067,
+        'max':  1924516352, ## 2108834067,
         'limit': 20,
         'wfl': 1
     }

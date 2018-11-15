@@ -8,6 +8,8 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+import os
+
 
 BOT_NAME = 'huaban'
 
@@ -75,9 +77,11 @@ DEFAULT_REQUEST_HEADERS = {
 ITEM_PIPELINES = {
     # 'huaban.pipelines.HuabanPipeline': 300,
     'huaban.pipelines.ImagePipeline': 100,
+   # 'scrapy.pipelines.images.ImagesPipeline': 299,
 }
-
-IMAGES_STORE = './images/beauty'
+IMAGES_URLS_FIELD = "image"
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir, 'images')
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
