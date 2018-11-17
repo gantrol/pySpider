@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
 import scrapy
+from datetime import datetime
 from scrapy.http import Request
+from scrapy.loader import ItemLoader
 from urllib.parse import urljoin
 from ArticleSpider.items import JobboleItem
+from ArticleSpider.utils.common import get_md5
 
 class JobboleSpider(scrapy.Spider):
     ## http://blog.jobbole.com/all-posts/
@@ -30,6 +33,11 @@ class JobboleSpider(scrapy.Spider):
         title = response.xpath('//h1/text()').extract_first()
         tt = response.xpath('//p[@class="entry-meta-hide-on-mobile"]')  # 存储time_create、tab的一行。
         time_create = tt.xpath('text()').extract_first().split()[0]  # Maybe if
+        try:
+            time_create = datetime.strptime(time_create, "%Y/%m/%d").date()
+        except Exception as e:
+            time_create = datetime.now().date()
+
         tag_list = tt.xpath('a/text()').extract()  # 标签列表
         tag_list = [element for element in tag_list if not element.strip().endswith("评论")]
         tags = ",".join(tag_list)
@@ -50,6 +58,7 @@ class JobboleSpider(scrapy.Spider):
             comment = 0
 
         item = response.meta['item']
+        item["url_object_id"] = get_md5(response.url)
         item["title"] = title
         item["time_create"] = time_create
         item["tags"] = tags
@@ -57,4 +66,7 @@ class JobboleSpider(scrapy.Spider):
         item["comment"] = comment
         item["favor"] = favor
         item["content"] = content
+
+        ## 通过ItemLoader加载Item
+        # item_loader = ItemLoader()
         yield item

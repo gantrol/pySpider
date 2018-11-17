@@ -18,6 +18,7 @@ class JobboleItem(scrapy.Item):
     title = scrapy.Field()
     time_create = scrapy.Field()
     url = scrapy.Field()
+    url_object_id = scrapy.Field()  ## 需要md5
     img_url = scrapy.Field()
     img_path = scrapy.Field()
     tags = scrapy.Field()
