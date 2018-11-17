@@ -7,8 +7,11 @@
 import codecs
 import json
 import MySQLdb
+import MySQLdb.cursors
+from scrapy import Request
 from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exporters import JsonItemExporter
+from twisted.enterprise import adbapi
 
 class ArticlespiderPipeline(object):
     def process_item(self, item, spider):
@@ -17,12 +20,18 @@ class ArticlespiderPipeline(object):
 
 class AritcleImagePipeline(ImagesPipeline):
     def item_completed(self, results, item, info):
-        for ok, value in results:
-            img_path = value["path"]
-        item["img_path"] = img_path
-        # if isinstance(item, dict) or self.images_result_field in item.fields:
-        #     item[self.images_result_field] = [x for ok, x in results if ok]
-        return item
+        def item_completed(self, results, item, info):
+            try:
+                for ok, value in results:
+                    img_path = value["path"]
+                item["img_path"] = img_path
+            except TypeError:
+                print("'Failure' object is not subscriptable")
+            finally:
+                return item
+
+    def get_media_requests(self, item, info):
+        yield Request(item['img_url'])  # , headers=self.headers)
 
 
 class AritcleJsonItemExporter(object):
@@ -69,3 +78,40 @@ class MysqlPipeline(object):
         self.cursor.execute(insert_sql,
                             (item["title"], item["url"], item["url_object_id"], item["time_create"], item["favor"]))
         self.conn.commit()
+
+
+class MysqlTwistedPipeline(object):
+    def __init__(self, dbpool):
+        self.dbpool = dbpool
+
+    @classmethod
+    def from_settings(cls, settings):
+        dbparms = dict(
+            host=settings["MYSQL_HOST"],
+            db=settings["MYSQL_DBNAME"],
+            user=settings["MYSQL_USER"],
+            passwd=settings["MYSQL_PASSWORD"],
+            charset='utf8',
+            cursorclass=MySQLdb.cursors.DictCursor,
+            use_unicode=True,
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+
+        return cls(dbpool)
+
+    def process_item(self, item, spider):
+        # 使用twisted将mysql插入变成异步执行
+        query = self.dbpool.runInteraction(self.do_insert, item)
+        query.addErrback(self.handle_error)  # 处理异常
+
+    def handle_error(self, failure):
+        # 处理异步插入的异常
+        print(failure)
+
+    def do_insert(self, cursor, item):
+        # 执行具体的插入
+        insert_sql = """
+            insert into jobbolespider(title, url, url_object_id, create_date, favor) VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(insert_sql,
+                       (item["title"], item["url"], item["url_object_id"], item["time_create"], item["favor"]))

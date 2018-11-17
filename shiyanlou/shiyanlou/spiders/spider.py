@@ -1,6 +1,6 @@
 import requests
 from urllib.parse import urlencode
-from pyquery import PyQuery as pq
+# from pyquery import PyQuery as pq
 # from pymongo import MongoClient
 import json
 
