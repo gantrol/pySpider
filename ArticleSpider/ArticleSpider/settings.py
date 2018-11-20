@@ -8,7 +8,7 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-import os
+
 
 
 BOT_NAME = 'ArticleSpider'
@@ -16,7 +16,10 @@ BOT_NAME = 'ArticleSpider'
 SPIDER_MODULES = ['ArticleSpider.spiders']
 NEWSPIDER_MODULE = 'ArticleSpider.spiders'
 
-
+import os
+# import sys
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ArticleSpider (+http://www.yourdomain.com)'
 
@@ -75,6 +78,8 @@ ITEM_PIPELINES = {
    # 'ArticleSpider.pipelines.MysqlPipeline': 302,
    # 'ArticleSpider.pipelines.MysqlTwistedPipeline': 298,
 }
+
+
 
 IMAGES_URLS_FIELD = "img_url"
 project_dir = os.path.abspath(os.path.dirname(__file__))

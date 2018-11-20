@@ -1,5 +1,5 @@
 # pySpider
-Some python spiders. Update In Three Days.
+Some python spiders. 
 1. [链家](lianjia/)
    1. requests、BeautifulSoup
    2. [链家租房](lianjia/lianjiaRent.py)
@@ -11,9 +11,9 @@ Some python spiders. Update In Three Days.
 3. [Base](Base)
    1. [猫眼](Base/Maoyan.md)
    2. [今日头条](Base/toutiao.py)
-4. [花瓣](huaban)
+4. huaban
    1. windows, python3.6, scrapy1.5
-   2. [...]
+   2. [花瓣](huaban)
 5. [ArticleSpider](ArticleSpider)
    1. windows, python3.6, mysql5.6, scrapy1.5
    2. [伯乐在线](ArticleSpider\ArticleSpider\spiders\jobbole.py)
